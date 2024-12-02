@@ -27,8 +27,17 @@ export const dataProvider: DataProvider = {
 
     return { data };
   },
-  getList: () => {
-    throw new Error("Not implemented");
+  getList: async ({ resource, pagination, filters, sorters, meta }) => {
+    const response = await fetch(`${API_URL}/${resource}`);
+
+    if (response.status < 200 || response.status > 299) throw response;
+
+    const data = await response.json();
+
+    return {
+      data,
+      total: 0, // We'll cover this in the next steps.
+    };
   },
   create: () => {
     throw new Error("Not implemented");
