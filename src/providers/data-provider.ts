@@ -28,7 +28,14 @@ export const dataProvider: DataProvider = {
     return { data };
   },
   getList: async ({ resource, pagination, filters, sorters, meta }) => {
-    const response = await fetch(`${API_URL}/${resource}`);
+        const params = new URLSearchParams();
+
+    if (pagination) {
+      params.append("_start", (pagination.current - 1) * pagination.pageSize);
+      params.append("_end", pagination.current * pagination.pageSize);
+    }
+
+    const response = await fetch(`${API_URL}/${resource}?${params.toString()}`)
 
     if (response.status < 200 || response.status > 299) throw response;
 
